@@ -482,6 +482,7 @@ private data class ThemePreviewMeta(
     val isChargingAnim: Boolean,
     val isUdfpsAnim: Boolean,
     val isUdfpsIcon: Boolean,
+    val isWaveform: Boolean,
 )
 
 @Composable
@@ -782,6 +783,7 @@ private fun ThemePreviewBox(theme: Theme, transparentBg: Boolean = false) {
             isChargingAnim = packageName.contains("charging_animation") || category.contains("charging_animation"),
             isUdfpsAnim = packageName.contains("udfps_animation") || category.contains("udfps_animation"),
             isUdfpsIcon = packageName.contains("udfps_icon") || category.contains("udfps_icon"),
+            isWaveform = packageName.contains("waveform") || category.contains("waveform"),
         )
     }
     val packageName = previewMeta.packageName
@@ -790,6 +792,7 @@ private fun ThemePreviewBox(theme: Theme, transparentBg: Boolean = false) {
     val isChargingAnim = previewMeta.isChargingAnim
     val isUdfpsAnim = previewMeta.isUdfpsAnim
     val isUdfpsIcon = previewMeta.isUdfpsIcon
+    val isWaveform = previewMeta.isWaveform
     val previewResIds = remember(packageName) { getLocalPreviewResIds(context, packageName) }
 
     val bgModifier = if (transparentBg) Modifier else Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
@@ -820,6 +823,23 @@ private fun ThemePreviewBox(theme: Theme, transparentBg: Boolean = false) {
                 modifier = Modifier.fillMaxSize(),
                 animate = false,
             )
+            isWaveform -> {
+                if (theme.previewImages.isNotEmpty()) {
+                    AsyncNetworkImage(
+                        url = theme.previewImages.first(),
+                        contentDescription = theme.name,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(40.dp),
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.Waves,
+                        contentDescription = null,
+                        modifier = Modifier.size(40.dp),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
             isUdfpsIcon -> {
                 if (theme.previewImages.isNotEmpty()) {
                     AsyncNetworkImage(
@@ -930,6 +950,7 @@ private fun ThemeListItem(
                         isChargingAnim = pkg.contains("charging_animation") || cat.contains("charging_animation"),
                         isUdfpsAnim = pkg.contains("udfps_animation") || cat.contains("udfps_animation"),
                         isUdfpsIcon = pkg.contains("udfps_icon") || cat.contains("udfps_icon"),
+                        isWaveform = pkg.contains("waveform") || cat.contains("waveform"),
                     )
                 }
                 val packageName = previewMeta.packageName
@@ -938,6 +959,7 @@ private fun ThemeListItem(
                 val isChargingAnim = previewMeta.isChargingAnim
                 val isUdfpsAnim = previewMeta.isUdfpsAnim
                 val isUdfpsIcon = previewMeta.isUdfpsIcon
+                val isWaveform = previewMeta.isWaveform
                 val ctx = LocalContext.current
                 val previewResIds = remember(packageName) { getLocalPreviewResIds(ctx, packageName) }
 
@@ -990,6 +1012,29 @@ private fun ThemeListItem(
                             modifier = Modifier.fillMaxSize(),
                             animate = false,
                         )
+                    } else if (isWaveform) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.surfaceContainer),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (theme.previewImages.isNotEmpty()) {
+                                AsyncNetworkImage(
+                                    url = theme.previewImages.first(),
+                                    contentDescription = theme.name,
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier.size(24.dp),
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Default.Waves,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(24.dp),
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                )
+                            }
+                        }
                     } else if (isUdfpsIcon) {
                         Box(
                             modifier = Modifier

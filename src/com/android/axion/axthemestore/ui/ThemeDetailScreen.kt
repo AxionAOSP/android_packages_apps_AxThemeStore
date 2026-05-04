@@ -43,6 +43,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -809,6 +810,8 @@ private fun DetailPreviewBox(theme: Theme) {
 
     val isChargingAnim = packageName.contains("charging_animation") || category.contains("charging_animation")
     val isUdfpsAnim = packageName.contains("udfps_animation") || category.contains("udfps_animation")
+    val isWaveform = packageName.contains("waveform") || category.contains("waveform")
+    
     val bgModifier = if (isChargingAnim || isUdfpsAnim) {
         Modifier.background(Color.Black)
     } else {
@@ -837,6 +840,23 @@ private fun DetailPreviewBox(theme: Theme) {
                     packageName = packageName,
                     modifier = Modifier.fillMaxSize()
                 )
+            }
+            isWaveform -> {
+                if (theme.previewImages.isNotEmpty()) {
+                    AsyncNetworkImage(
+                        url = theme.previewImages.first(),
+                        contentDescription = theme.name,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(120.dp),
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.Waves,
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
             packageName.contains("battery") || category.contains("battery") -> {
                 BatteryStylePreview(

@@ -75,6 +75,7 @@ private const val CATEGORY_SIGNAL = "android.theme.customization.signal_icon"
 private const val CATEGORY_WIFI = "android.theme.customization.wifi_icon"
 private const val CATEGORY_UDFPS = "android.theme.customization.udfps_animation"
 private const val CATEGORY_UDFPS_ICON = "android.theme.customization.udfps_icon"
+private const val CATEGORY_QS_WAVEFORM = "android.theme.customization.qs_waveform"
 
 data class OverlayPackItem(
     val packageName: String,
@@ -97,6 +98,7 @@ fun SystemThemePackagesScreen(
             context.getString(R.string.system_icons_title),
             context.getString(R.string.system_themes_title)
         ).apply {
+            add(context.getString(R.string.qs_waveform_title))
             if (isUdfpsSupported) {
                 add(context.getString(R.string.udfps_animation_title))
                 add(context.getString(R.string.udfps_icon_title))
@@ -108,6 +110,7 @@ fun SystemThemePackagesScreen(
     var wifiPacks by remember { mutableStateOf<List<OverlayPackItem>>(emptyList()) }
     var udfpsPacks by remember { mutableStateOf<List<OverlayPackItem>>(emptyList()) }
     var udfpsIconPacks by remember { mutableStateOf<List<OverlayPackItem>>(emptyList()) }
+    var qsWaveformPacks by remember { mutableStateOf<List<OverlayPackItem>>(emptyList()) }
 
     val previewMap = remember {
         val map = mutableMapOf<String, String>()
@@ -181,6 +184,20 @@ fun SystemThemePackagesScreen(
                 )
             } catch (_: Exception) { null }
         }
+
+        val activeQsWaveform = proxy.getCategoryTheme(CATEGORY_QS_WAVEFORM)
+        qsWaveformPacks = proxy.getAvailableOverlays(CATEGORY_QS_WAVEFORM).mapNotNull { pkg ->
+            try {
+                val ai = pm.getApplicationInfo(pkg, 0)
+                OverlayPackItem(
+                    packageName = pkg,
+                    label = ai.loadLabel(pm).toString(),
+                    isActive = pkg == activeQsWaveform,
+                    icon = try { pm.getApplicationIcon(pkg) } catch (_: Exception) { null },
+                    previewResPrefix = previewMap[pkg] ?: ""
+                )
+            } catch (_: Exception) { null }
+        }
     }
 
     LaunchedEffect(Unit) { refreshPacks() }
@@ -220,15 +237,17 @@ fun SystemThemePackagesScreen(
             val packs = when (selectedTab) {
                 0 -> signalPacks
                 1 -> wifiPacks
-                2 -> if (isUdfpsSupported) udfpsPacks else emptyList()
-                3 -> if (isUdfpsSupported) udfpsIconPacks else emptyList()
+                2 -> qsWaveformPacks
+                3 -> if (isUdfpsSupported) udfpsPacks else emptyList()
+                4 -> if (isUdfpsSupported) udfpsIconPacks else emptyList()
                 else -> emptyList()
             }
             val category = when (selectedTab) {
                 0 -> CATEGORY_SIGNAL
                 1 -> CATEGORY_WIFI
-                2 -> if (isUdfpsSupported) CATEGORY_UDFPS else ""
-                3 -> if (isUdfpsSupported) CATEGORY_UDFPS_ICON else ""
+                2 -> CATEGORY_QS_WAVEFORM
+                3 -> if (isUdfpsSupported) CATEGORY_UDFPS else ""
+                4 -> if (isUdfpsSupported) CATEGORY_UDFPS_ICON else ""
                 else -> ""
             }
 

@@ -7,6 +7,7 @@
     <string name="system_icons_title">System Icons</string>
     <string name="udfps_animation_title">Fingerprint Animations</string>
     <string name="udfps_icon_title">Fingerprint Icons</string>
+    <string name="qs_waveform_title">Media Waveforms</string>
     <string name="no_theme_packages">No theme packages installed</string>
     <string name="no_theme_packages_desc">Install theme packages to customize system icons and UI</string>
     <string name="theme_applied">Applied</string>

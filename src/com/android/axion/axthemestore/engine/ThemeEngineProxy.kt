@@ -58,6 +58,7 @@ class ThemeEngineProxy(private val context: Context) {
             "battery_style" to "android.theme.customization.battery_style",
             "udfps_animation" to "android.theme.customization.udfps_animation",
             "udfps_icon" to "android.theme.customization.udfps_icon",
+            "qs_waveform" to "android.theme.customization.qs_waveform",
         )
 
         private val SYNCED_OVERLAY_CATEGORIES = setOf(
@@ -68,6 +69,7 @@ class ThemeEngineProxy(private val context: Context) {
             "android.theme.customization.battery_style",
             "android.theme.customization.udfps_animation",
             "android.theme.customization.udfps_icon",
+            "android.theme.customization.qs_waveform",
         )
 
         object Category {

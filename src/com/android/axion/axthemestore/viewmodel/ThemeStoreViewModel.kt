@@ -362,10 +362,12 @@ class ThemeStoreViewModel(application: Application) : AndroidViewModel(applicati
                     return@launch
                 }
                 
-                apkFile.delete()
                 installedCount++
             }
-            
+
+            // Delete files only after all successful installations
+            filesToInstall.values.forEach { it.delete() }
+
             if (theme.isUnified && theme.overlays.isNotEmpty()) {
                 val packageName = theme.overlays.first().packageName
                 val actualTargets = readTargetsFromInstalledApk(packageName)
