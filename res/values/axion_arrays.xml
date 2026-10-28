@@ -38,6 +38,8 @@
         <item>asus_udfps_anim_1_10</item>
         <item>asus_udfps_anim_2_35</item>
         <item>asus_udfps_anim_3_25</item>
+        <item>water_ripple_anim_14</item>
+        <item>prism_shockwave_anim_14</item>
     </string-array>
     <string-array translatable="false" name="udfps_animation_style_map">
         <item>aurora|aurora_anim_21</item>
@@ -76,5 +78,7 @@
         <item>udfpsrogfusionrecognizinganim|asus_udfps_anim_1_10</item>
         <item>udfpsrogpulsarrecognizinganim|asus_udfps_anim_2_35</item>
         <item>udfpsrogsupernovarecognizinganim|asus_udfps_anim_3_25</item>
+        <item>waterripple|water_ripple_anim_14</item>
+        <item>shaderprism|prism_shockwave_anim_14</item>
     </string-array>
 </resources>
